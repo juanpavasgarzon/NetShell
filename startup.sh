@@ -144,7 +144,7 @@ function create_project_structure {
 # Sets up project references between layers
 function add_project_references {
     local base_path="$PROJECT_PATH/$PROJECT_NAME"
-    printf "${BLUE}Adding project references...${RESET}\n"
+    printf "\n${BLUE}Adding project references...${RESET}\n"
 
     dotnet add "$base_path/$PROJECT_NAME.API/$PROJECT_NAME.API.csproj" reference \
         "$base_path/$PROJECT_NAME.Domain/$PROJECT_NAME.Domain.csproj" \
@@ -184,7 +184,7 @@ function create_solution_file {
 function create_support_files {
     local base_path="$PROJECT_PATH/$PROJECT_NAME"
 
-    printf "${BLUE}Creating Docker Compose File...${RESET}\n"
+    printf "\n${BLUE}Creating Docker Compose File...${RESET}\n"
     cat >"$base_path/docker-compose.yml" <<EOF
 services:
   $PROJECT_NAME:
@@ -196,7 +196,7 @@ services:
 EOF
     add_rollback_path "$base_path/docker-compose.yml"
 
-    printf "${BLUE}Creating Dockerfile...${RESET}\n"
+    printf "\n${BLUE}Creating Dockerfile...${RESET}\n"
     cat >"$base_path/Dockerfile" <<EOF
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-env
 WORKDIR /app
@@ -214,7 +214,7 @@ EOF
 
 # Restores NuGet packages
 function restore_packages {
-    printf "${BLUE}Restoring NuGet packages...${RESET}\n"
+    printf "\n${BLUE}Restoring NuGet packages...${RESET}\n"
     dotnet restore "$PROJECT_PATH/$PROJECT_NAME/$PROJECT_NAME.sln"
 }
 
