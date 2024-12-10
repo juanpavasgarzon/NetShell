@@ -2,20 +2,24 @@
 # startup.sh
 
 ## Description:
+
 Creates a new .NET solution with Clean Architecture structure including API, Domain,
 Application, Infrastructure, Shared, and Tests projects. Also sets up Docker support
 and project references.
 
 ## Usage:
+
 ```bash
 ./startup.sh <project_name> [<project_path>]
 ```
 
 ### Options:
+
 - `-h, --help`  
   Show this help message and exit.
 
 ### Arguments:
+
 - `project_name`  
   Name of the project/solution to create (required).
 - `project_path`  
@@ -30,11 +34,12 @@ ProjectName/
 ├── ProjectName.Infrastructure/ - Infrastructure layer.
 ├── ProjectName.Shared/         - Shared components.
 ├── ProjectName.Tests/          - Unit tests.
-├── docker-compose.yml         - Docker compose configuration.
-└── Dockerfile                 - Docker build configuration.
+├── docker-compose.yml          - Docker compose configuration.
+└── Dockerfile                   - Docker build configuration.
 ```
 
 ## Functions:
+
 - **print_usage**  
   Displays usage information.
   
