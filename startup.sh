@@ -63,26 +63,30 @@ ROLLBACK_PATHS=()
 
 # Prints usage information
 function print_usage {
-    cat <<EOF
-${GREEN}Usage:${RESET}
-    ./startup.sh <project_name> [<project_path>]
-
-${GREEN}Options:${RESET}
-    -h, --help        Show this help message and exit.
-
-${GREEN}Arguments:${RESET}
-    project_name    - Name of the project/solution to create (required).
-    project_path    - Path where the project should be created (optional, defaults to current directory).
-EOF
+    printf "${GREEN}Usage:${RESET}\n"
+    printf "    ./startup.sh <project_name> [<project_path>]\n\n"
+    printf "${GREEN}Options:${RESET}\n"
+    printf "    -h, --help        Show this help message and exit.\n\n"
+    printf "${GREEN}Arguments:${RESET}\n"
+    printf "    project_name    - Name of the project/solution to create (required).\n"
+    printf "    project_path    - Path where the project should be created (optional, defaults to current directory).\n"
     exit 0
 }
 
 # Validates input arguments
 function validate_inputs {
-    if [[ -z "$PROJECT_NAME" ]]; then
+    for arg in "$@"; do
+        if [[ "$arg" == "-h" || "$arg" == "--help" ]]; then
+            print_usage
+        fi
+    done
+
+    # Ensure PROJECT_NAME is not empty
+    if [[ -z "${PROJECT_NAME:-}" ]]; then
         printf "${RED}Error: Project name is required.${RESET}\n"
         print_usage
     fi
+
 }
 
 # Adds a path to the rollback list
@@ -211,13 +215,22 @@ function restore_packages {
 # Main function to orchestrate script execution
 function main {
     trap rollback ERR
-    validate_inputs
+
+    # Validate inputs before proceeding
+    validate_inputs "$@"
+
+    # Assign PROJECT_NAME and PROJECT_PATH after validation
+    PROJECT_NAME="$1"
+    PROJECT_PATH="${2:-$(pwd)}"
+
+    # Execute main script functions
     create_project_structure
     create_solution_file
     add_project_references
     create_support_files
     restore_packages
+
     printf "${GREEN}Project '%s' created successfully in '%s'${RESET}\n" "$PROJECT_NAME" "$PROJECT_PATH"
 }
 
-main
+main "$@"
