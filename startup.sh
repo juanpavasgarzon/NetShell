@@ -65,6 +65,7 @@ RESET="\033[0m"
 
 # Variables to hold project name and path
 PROJECT_NAME="${1:-}"
+SERVICE_NAME=$(echo "$PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
 PROJECT_PATH="${2:-$(pwd)}"
 ROLLBACK_PATHS=()
 
@@ -187,12 +188,16 @@ function create_support_files {
     printf "\n${BLUE}Creating Docker Compose File...${RESET}\n"
     cat >"$base_path/docker-compose.yml" <<EOF
 services:
-  $PROJECT_NAME:
+  $SERVICE_NAME:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: ${SERVICE_NAME}-container
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
     ports:
-      - "5000:80"
+      - "8000:80"
 EOF
     add_rollback_path "$base_path/docker-compose.yml"
 
